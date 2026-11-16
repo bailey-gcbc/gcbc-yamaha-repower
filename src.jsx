@@ -11,7 +11,33 @@ function payload(){return{motorId:model,rigId:rig,control:tiller?'none':control,
 async function next(){setError('');if(step===0&&range==null||step===1&&hp==null||step===2&&!model||step===3&&!rig)return;if(step===6&&extras.includes('AP3')&&extras.includes('AP4')){setError('Choose either Level 3 or Level 4.');return}if(steps[position+1]===7){setBusy(true);try{setQuote(await api('estimate',payload()));setStep(7)}catch(e){setError(e.message)}finally{setBusy(false)}}else setStep(steps[position+1])}
 function back(){setError('');if(position>0)setStep(steps[position-1])}
 function update(k,v){setForm(f=>({...f,[k]:v}))}
-async function send(e){e.preventDefault();if(!quote)return;setBusy(true);setError('');try{await api('enquiry',{...payload(),...form});setSuccess(true)}catch(e){setError(e.message)}finally{setBusy(false)}}
+async function send(e){
+ e.preventDefault();if(!quote)return;
+ setBusy(true);setError('');
+ try{
+  if(!form.rated||!form.install)throw Error('Please confirm both acknowledgements.');
+  // Recalculate immediately before submitting, so the displayed estimate is current.
+  const latest=await api('estimate',payload());
+  if(latest.estimate!==quote.estimate){setQuote(latest);throw Error('Your indicative price has changed. Please review the updated estimate and submit again.');}
+  const data={
+   'form-name':'yamaha-repower-enquiry',
+   'bot-field':form.website,
+   'First name':form.first,'Last name':form.last,'Mobile number':form.phone,
+   'Email address':form.email,'Suburb':form.suburb,'Boat make and model':form.boat,
+   'Additional information':form.notes,'Boat HP rating confirmed':form.rated?'Yes':'No',
+   'GCBC installation acknowledged':form.install?'Yes':'No',
+   'Yamaha outboard':model,'Horsepower':String(hp),'Steering':tiller?'Tiller Steer':variant?.operation||'',
+   'Rigging selection':rig,'Controls':tiller?'Not applicable':control==='standard'?'Standard Yamaha controls':controlOpts.find(x=>x.id===control)?.label||control,
+   'Gauges':tiller?'Not applicable':gauge==='standard'?'Standard Yamaha gauges':gaugeOpts.find(x=>x.id===gauge)?.label||gauge,
+   'Additional options':extras.map(id=>opts.find(x=>x.id===id)?.label||id).join(', ')||'None',
+   'Indicative fitted price AUD':String(latest.estimate),
+   'Indicative quote only':'Yes, subject to final inspection and formal quotation'
+  };
+  const response=await fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(data).toString()});
+  if(!response.ok)throw Error('The enquiry could not be submitted. Please try again or contact GCBC directly.');
+  setSuccess(true);
+ }catch(e){setError(e.message||'Unable to submit enquiry.')}finally{setBusy(false)}
+}
 function toggleExtra(id){setExtras(a=>a.includes(id)?a.filter(x=>x!==id):[...a.filter(x=>!(['AP3','AP4'].includes(id)&&['AP3','AP4'].includes(x))),id])}
 const Card=({active,onClick,children,src})=><button type="button" className={'choice '+(active?'active':'')} onClick={onClick}>{image(src)}<span>{children}</span><span className="check">{active?'✓':'○'}</span></button>;
 return <><header><div className="brand"><span className="mark">GCBC</span><div><strong>GOLD COAST BOATING CENTRE</strong><small>YAMAHA REPOWER CENTRE</small></div></div><h1>Build your Yamaha repower</h1><p>Find the right outboard for your boat and receive an indicative fitted price.</p></header><main><div className="panel">{loadError?<div className="alert">Pricing catalogue unavailable. {loadError}. Please contact GCBC.</div>:!catalog?<p>Loading Yamaha outboards…</p>:success?<div className="success"><h2>Thanks for your enquiry!</h2><p>Our team has received your Yamaha repower request and will be in touch.</p></div>:<><div className="progress-head"><span>STEP {position+1} OF {steps.length}</span><span>{titles[step]}</span></div><div className="progress">{steps.map((s,i)=><i key={s} className={i<=position?'done':''}/>)}</div>

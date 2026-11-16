@@ -35,3 +35,11 @@ Customer-facing configurator with one total indicative fitted price. Individual 
 ## Pricing rules
 
 The Netlify server retrieves current pricing from Google Sheets for each estimate, calculates motor + exactly one compatible rigging package + compatible selected options, and returns **only the final total**. The browser receives no individual prices. Server-side validation rejects invalid combinations and mutually exclusive AP3/AP4 selections. Netlify server credentials must never be prefixed `VITE_`.
+
+
+## Netlify Forms (November 2026 update)
+This build uses **Netlify Forms**, not Resend, for enquiries. The hidden HTML form in `index.html` registers the form at build time; the React form posts URL-encoded values to `/`.
+
+After deploying through GitHub, open **Netlify → Forms** and confirm `yamaha-repower-enquiry` is detected. Configure a form submission email notification to `info@gcbc.com.au` in Netlify. Send a test enquiry, confirm it appears in Netlify submissions, and confirm the email notification arrives. Netlify Forms must be enabled for the site; check your plan's form usage limits.
+
+`ENABLE_ENQUIRIES`, `RESEND_API_KEY`, and `ENQUIRY_FROM_EMAIL` are no longer used by the customer enquiry flow. The old `netlify/functions/enquiry.mjs` is removed from this distribution. Keep `SHEETS_WEBAPP_URL` and `SHEETS_API_SECRET` set for pricing. Netlify Forms submission values, including the price, are customer-supplied and must be independently verified before preparing a binding quote.
