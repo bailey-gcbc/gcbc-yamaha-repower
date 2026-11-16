@@ -9,7 +9,7 @@ export function configurations(data){
  const rigs=new Map(data.rigging.map(r=>[String(r.ID),r]));
  return data.outboards.filter(m=>m.Model&&m['Motor sale AUD']!==''&&m['Motor sale AUD']!=null&&Number(m.HP)>=20&&m.Model!=='F15').map(m=>{
  const ids=parseIds(m['Rigging IDs']);const variants=ids.map(id=>({id,operation:String(rigs.get(id)?.Operation||'')})).filter(r=>rigs.has(r.id));
- return {id:String(m.Model),hp:Number(m.HP),technology:String(m.Technology||''),variants,image:`/images/motors/${encodeURIComponent(String(m.Model))}.webp`,review:String(m.Status||'')};
+ return {id:String(m.Model),hp:Number(m.HP),technology:String(m.Technology||''),variants,image:`/images/motors/${encodeURIComponent(String(m.Model))}.jpg`,review:String(m.Status||'')};
  });
 }
 export function allowed(data,model,rig){const r=data.rigging.find(x=>String(x.ID)===rig);return r&&parseIds(model['Rigging IDs']).includes(rig)?r:null}
@@ -33,4 +33,4 @@ export function selections(data,motorId,rigId,control,gauge,extras){
  if(!Number.isFinite(price))throw Error('Invalid pricing');
  return {price,model:m,rig:r,optionIds:ids,tiller};
 }
-export function publicOptions(data,model,rigId){const list=optionsFor(data,model,rigId);return list.map(o=>({id:String(o.ID),label:String(o['Option / upgrade']),category:String(o.Category),image:`/images/options/${encodeURIComponent(String(o.ID))}.webp`,note:String(o.Notes||'')}));}
+export function publicOptions(data,model,rigId){const list=optionsFor(data,model,rigId);return list.map(o=>({id:String(o.ID),label:String(o['Option / upgrade']),category:String(o.Category),image:`/images/options/${encodeURIComponent(String(o.ID))}.jpg`,note:String(o.Notes||'')}));}
