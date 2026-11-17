@@ -3,3 +3,6 @@
 .pricing-disclaimer{margin:18px 0 26px;padding:18px 20px;border:1px solid #d8e0e9;border-radius:10px;background:#f5f7fa;color:#405066;font-size:13px;line-height:1.65}.pricing-disclaimer strong{display:block;color:#25364c;font-size:14px;margin-bottom:8px}.pricing-disclaimer p{margin:0 0 9px}.pricing-disclaimer p:last-child{margin-bottom:0}
 
 .rebate-applied{margin:14px 0 20px;padding:16px 18px;background:#f2f8f4;border:1px solid #c5e4cd;border-radius:12px;color:#175e36}.rebate-applied strong{display:block;font-size:1rem}.rebate-applied p{margin:6px 0 0;line-height:1.5;font-size:.92rem}
+
+/* GCBC + Yamaha header logos */
+.brand-logos{display:flex;align-items:center;gap:clamp(15px,3vw,30px);margin-bottom:35px;flex-wrap:wrap}.brand-logo{display:block;object-fit:contain;object-position:left center;height:auto;max-height:88px}.gcbc-logo{width:clamp(170px,32vw,290px)}.yamaha-logo{width:clamp(150px,29vw,265px)}.brand-divider{height:60px;width:1px;background:rgba(255,255,255,.3);flex-shrink:0}@media(max-width:520px){.brand-logos{gap:12px;margin-bottom:26px}.gcbc-logo{width:47%;max-height:65px}.yamaha-logo{width:43%;max-height:65px}.brand-divider{height:42px}}
