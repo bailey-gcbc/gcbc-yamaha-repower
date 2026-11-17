@@ -46,6 +46,15 @@ export function applicableRebate(data,motorId){
  const adjustment=Number(p['Adjustment AUD']);
  return Number.isFinite(adjustment)&&adjustment<0?adjustment:0;
 }
+// The Service Credits sheet is keyed by horsepower, not model. Never alter fitted pricing.
+export function firstServiceCredit(data,hp){
+ const rows=(data.serviceCredits||[]).filter(row=>Number(row.HP)===Number(hp));
+ if(rows.length!==1)return 0; // fail closed on duplicate or missing HP rows
+ const raw=rows[0]['First Service Credit AUD'];
+ if(raw==null||String(raw).trim()==='')return 0;
+ const amount=Number(raw);
+ return Number.isFinite(amount)&&amount>0?Math.round(amount*100)/100:0;
+}
 export function selections(data,motorId,rigId,control,gauge,extras){
  const m=data.outboards.find(x=>String(x.Model)===motorId);if(!m)throw Error('Unknown model');
  const r=allowed(data,m,rigId);if(!r)throw Error('Invalid rigging selection');
