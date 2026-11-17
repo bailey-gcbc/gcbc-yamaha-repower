@@ -6,3 +6,5 @@
 
 /* GCBC + Yamaha header logos */
 .brand-logos{display:flex;align-items:center;gap:clamp(15px,3vw,30px);margin-bottom:35px;flex-wrap:wrap}.brand-logo{display:block;object-fit:contain;object-position:left center;height:auto;max-height:88px}.gcbc-logo{width:clamp(170px,32vw,290px)}.yamaha-logo{width:clamp(150px,29vw,265px)}.brand-divider{height:60px;width:1px;background:rgba(255,255,255,.3);flex-shrink:0}@media(max-width:520px){.brand-logos{gap:12px;margin-bottom:26px}.gcbc-logo{width:47%;max-height:65px}.yamaha-logo{width:43%;max-height:65px}.brand-divider{height:42px}}
+
+.service-credit{margin:14px 0 20px;padding:20px 22px;background:#fff8e8;border:1px solid #e8c875;border-radius:12px;color:#17263a}.service-credit-kicker{color:#95600c;font-size:.76rem;font-weight:800;letter-spacing:.06em;margin-bottom:10px}.service-credit>strong{display:block;font-size:clamp(1.15rem,3vw,1.45rem);line-height:1.25}.service-credit p{line-height:1.55;margin:10px 0 14px;color:#344054}.service-credit small{display:block;border-top:1px solid #e8c875;padding-top:12px;line-height:1.55;color:#6b6252}
